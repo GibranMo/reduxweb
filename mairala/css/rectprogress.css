@@ -1,0 +1,154 @@
+/*
+  335 enitre length of bar
+	*/
+#myProgress {
+  width: 90%;
+  height: 8px;
+  position: relative;
+  background-color: white;
+  
+    -webkit-border-radius: 8px;
+     -moz-border-radius: 8px;  
+  
+}
+
+#myProgressJoint  {
+  width: 85%;
+  height: 8px;
+  position: relative;
+  background-color: #CDCDCD;
+
+   -webkit-border-radius: 8px;
+     -moz-border-radius: 8px;  
+  
+  
+}
+
+#myProgressAnx  {
+  width: 81%;
+  height: 8px;
+  position: relative;
+  background-color: #CDCDCD;
+
+    -webkit-border-radius: 8px;
+     -moz-border-radius: 8px; 
+  
+}
+
+#myProgressMS  {
+  width: 84%;
+  height: 8px;
+  position: relative;
+  background-color: #CDCDCD;
+
+    -webkit-border-radius: 8px;
+     -moz-border-radius: 8px; 
+  
+}
+
+#myProgressStretch  {
+  width: 84%;
+  height: 8px;
+  position: relative;
+  background-color: #CDCDCD;
+
+    -webkit-border-radius: 8px;
+     -moz-border-radius: 8px; 
+  
+}
+
+#myBar {
+  background-color:#2E2E2E;
+  width: 40px;
+  height: 8px;
+  position: absolute;
+  
+    -webkit-border-radius: 8px;
+     -moz-border-radius: 8px; 
+}
+
+#myBarAnxiety {
+  background-color:#2E2E2E;
+  width: 280px;
+  height: 8px;
+  position: absolute;
+  
+    -webkit-border-radius: 8px;
+     -moz-border-radius: 8px; 
+}
+
+#myBarJointPain{
+  background-color:#2E2E2E;
+  width: 310px;
+  height: 8px;
+  position: absolute;
+
+    -webkit-border-radius: 8px;
+     -moz-border-radius: 8px; 
+  
+}
+
+#myBarPerformance{
+  background-color:#2E2E2E;
+  width: 150px;
+  height: 8px;
+  position: absolute;
+  
+    -webkit-border-radius: 8px;
+     -moz-border-radius: 8px; 
+}
+
+#myBarMuscleSoreness{
+  background-color:#2E2E2E;
+  width: 290px;
+  height: 8px;
+  position: absolute;
+
+    -webkit-border-radius: 8px;
+     -moz-border-radius: 8px; 
+  
+}
+
+#myBarRecovery{
+  background-color:#2E2E2E;
+  width: 5px;
+  height: 8px;
+  position: absolute;
+
+    -webkit-border-radius: 8px;
+     -moz-border-radius: 8px; 
+  
+}
+
+#myBarTight{
+  background-color:#2E2E2E;
+  width: 100px;
+  height: 8px;
+  position: absolute;
+
+    -webkit-border-radius: 8px;
+     -moz-border-radius: 8px; 
+  
+}
+
+#myBarMetabolism{
+  background-color:#2E2E2E;
+  width: 170px;
+  height: 8px;
+  position: absolute;
+
+    -webkit-border-radius: 8px;
+     -moz-border-radius: 8px; 
+  
+}
+
+#myBarStretch{
+  background-color:#2E2E2E;
+  width: 280px;
+  height: 8px;
+  position: absolute;
+  
+    -webkit-border-radius: 8px;
+     -moz-border-radius: 8px; 
+}
+
