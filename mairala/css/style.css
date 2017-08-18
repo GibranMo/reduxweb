@@ -479,9 +479,23 @@ div.icon.em{
   background-color: red;
 }
 
+/***************
+Pricing
+***************/
+.saleNotice {
+	color: #6093e7;
+	padding-top: 10px;
+	letter-spacing: 3px;
+	font-size: 22px;
+}
+
 /******************************************************************
   Colors
 ******************************************************************/
+
+.chillBlue {
+	color: #6093e7;
+}
 
 .color {
   color:  #2e2e2e;
@@ -1310,6 +1324,16 @@ div.team-member {
 .blog-bottom span {
 color: #333;
 }
+.blog-bottom b{
+	text-decoration: line-through;
+	text-decoration-color : #6093e7;
+}
+
+.garrison span{
+	padding-left: 10px;
+	color: #6093e7;
+}
+
 .address {
   padding-top: 15px;
 }
@@ -1575,6 +1599,7 @@ padding-top: 30px;
 	color:#7B6C63;
 	font-size: 1em;
 }
+
 
 .blog-rightGibran h4{
 	font-family: 'Raleway', sans-serif;
