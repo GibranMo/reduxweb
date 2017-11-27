@@ -5,5 +5,3 @@ window.randomize = function() {
 }
 setTimeout(window.randomize, 200);
 $('.radial-progress').click(window.randomize);
-
-// Read more here: https://medium.com/@andsens/radial-progress-indicator-using-css-a917b80c43f9

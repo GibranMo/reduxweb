@@ -1,0 +1,393 @@
+.styleGraxpo {
+
+}
+
+
+.styleGraxpo .wedo_content_area {
+padding-bottom: 50px;
+overflow: hidden;
+text-align: -webkit-center;
+}
+
+.styleGraxpo .wedo_content_area a:hover {
+text-decoration: none;
+color: white;
+}
+
+.styleGraxpo .single_wedo {
+
+ position: relative;
+
+cursor: pointer;
+color: #FAFAFA;
+width: 80%;
+height: 310px;
+margin-top: 40px;
+border: 1px solid #fff;
+padding-top: 13px;
+padding-bottom: 0px;
+padding-right: 0px;
+padding-left: 0px;
+border-radius: 4px;
+transition: .5s;
+
+}
+
+  .styleGraxpo .single_wedo:hover .addToCart{
+      color: red;
+      background: #6093e7;
+       box-shadow: inset 0 0 0 2px #fff;
+     
+    }
+  .styleGraxpo .single_wedo:hover .addToCart h6{
+      color: #fff;
+      font-weight: 400;
+    }
+
+.styleGraxpo .single_wedo .addToCart  {
+
+position: absolute;
+
+height: 60px;
+width: 100%;
+
+border-radius: 4px;
+top: 250px;
+ background-color: rgb(255,255,255); 
+background-color: rgba(255,255,255);
+
+transition: .5s;
+}
+
+.styleGraxpo .single_wedo .addToCart h6 {
+  
+ text-align: center;
+vertical-align: middle;
+line-height: 60px; 
+color: black;
+font-weight: 500;
+}
+
+
+
+.styleGraxpo .single_wedo h2{
+font-size: 1.3rem;
+}
+.styleGraxpo .single_wedo:hover {
+
+border: 1px solid #6093e7;
+  background-image: url(../images/overlay_light_diagonal.png);
+}
+
+.styleGraxpo .single_wedo:hover .circlex{
+
+ border: 2px solid  #6093e7;
+ color: #6093e7;
+ transform: scale(0.9);
+ background: #fff;
+}
+
+
+
+
+.about .single_wedo .packdes {
+padding-bottom: 40px;
+}
+
+.styleGraxpo .single_wedo .wedoprice {
+  /*
+padding-bottom: 40px;
+*/
+font-size: 1.1rem;
+letter-spacing: 2px;
+font-weight: 500;
+}
+.single_wedo .packdes h4{
+font-size: 0.9rem;
+font-style: normal;
+color: #6093e7;
+}
+.single_wedo .packdes h2{
+font-size: 1.2rem;
+font-weight: 300;
+letter-spacing: 2px;
+}
+#trin {
+font-family: 'Circo';
+
+font-size: 2.8rem;
+color: #fff;
+margin-bottom: 35px;
+
+transition: .3s;
+}
+
+.styleGraxpo .single_wedo .circlex {
+
+ font-family: 'Circo',sans-serif;
+
+width: 50px;
+height: 50px;
+border-radius: 50%;
+font-size: 1.4em;
+font-weight: 400;
+color: #fff;
+line-height: 1.95em;
+text-align: center;
+
+border: 2px solid #fff;
+margin: auto;
+
+margin-bottom: 35px;
+transition: .5s;
+ padding-left: 4px;
+}
+
+.styleGraxpo .single_wedo:hover .single_left_icon i {
+background: #ffffff;
+color: #e84c3d;
+}
+.styleGraxpo .single_wedo:hover .single_right_text h4 {
+color: #fff;
+}
+
+.style-clone .blog .about {
+       padding-bottom: 0%;
+   }
+
+
+.styleGraxpo .blog .about .pricing-note {
+ color: #ddd;
+ font-size: 0.85rem;
+}
+
+@media only screen and (max-width: 414px) {
+
+  .styleGraxpo .single_wedo {
+    height: 210px;
+  }
+  .styleGraxpo .single_wedo .addToCart  {
+    position: absolute;
+   
+    height: 50px;
+    width: 100%;
+
+    border: 1px solid  #fff;
+
+    top: 158px;
+  }
+
+  .styleGraxpo .single_wedo .addToCart h6 {
+  
+  
+     text-align: center;
+    vertical-align: middle;
+     color: black;
+     
+    font-size: 0.8rem;
+    line-height: 3.8;
+    font-weight: 500;
+   
+
+}
+
+.styleGraxpo .single_wedo .circlex {
+
+    width: 30px;
+    height: 30px;
+     border: 2px solid #fff;
+    font-size: 0.75em;
+      line-height: 2.1em;
+    margin-bottom: 5px;
+     padding-left: 2px;
+   }
+   .styleGraxpo .single_wedo:hover .circlex{
+
+     border: 1px solid  #6093e7;
+ }
+
+  
+   .styleGraxpo .single_wedo .packdes h2{
+     font-size: 0.995rem;
+     letter-spacing: 1px;
+   }
+
+
+   .styleGraxpo .single_wedo .packdes h4{
+
+     font-size: 0.6rem;
+     letter-spacing: 0px;
+   }
+
+   .styleGraxpo .single_wedo {
+      width: 100%;
+     padding-top: 10px; 
+     }
+
+
+     .styleGraxpo .single_wedo .wedoprice {
+       font-size: 0.82rem;
+       font-weight: 200;
+       padding-bottom: 15px;
+       letter-spacing: normal;
+     }
+
+     .about .single_wedo .packdes {
+       padding-bottom: 10px;
+       padding-left: 4px;
+       padding-right: 4px;
+     }
+
+     .styleGraxpo .single_wedo#reduxmember h2{
+       letter-spacing: 0px;
+       font-size: 0.80rem;
+     }
+     .styleGraxpo .single_wedo#reduxmember h4{
+       letter-spacing: 0px;
+       font-size: 0.6rem;
+     }
+     .styleGraxpo .about .wedo_content_area .col-md-4 {
+       margin-top: 0px;
+     }
+     .styleGraxpo .wedo_content_area {
+       padding-bottom: 0px;
+       overflow: hidden;
+     }
+
+    .styleGraxpo .blog .about .pricing-note#member-note {      
+       font-size: 0.6rem;
+       margin-top: 20px;
+     }   
+
+   .styleGraxpo .blog .about .pricing-note {     
+     font-size: 0.6rem;
+     margin-top: 8px;
+     }   
+
+}
+
+@media only screen and (max-width: 375px) {
+
+  .styleGraxpo .single_wedo {
+    height: 210px;
+  }
+  .styleGraxpo .single_wedo .addToCart  {
+    position: absolute;
+   
+    height: 50px;
+    width: 100%;
+
+    border: 1px solid  #fff;
+
+    top: 158px;
+  }
+
+  .styleGraxpo .single_wedo .addToCart h6 {
+  
+  
+     text-align: center;
+    vertical-align: middle;
+     color: black;
+     
+    font-size: 0.8rem;
+    line-height: 1.8;
+    font-weight: 500;
+   
+
+}
+
+.styleGraxpo .single_wedo .circlex {
+
+    width: 30px;
+    height: 30px;
+     border: 1px solid #fff;
+    font-size: 0.75em;
+      line-height: 2.1em;
+    margin-bottom: 5px;
+     padding-left: 2px;
+   }
+   .styleGraxpo .single_wedo:hover .circlex{
+
+     border: 1px solid  #6093e7;
+ }
+
+ 
+   .styleGraxpo .single_wedo .packdes h2{
+     font-size: 0.875rem;
+     letter-spacing: 1px;
+   }
+
+  
+  
+   .styleGraxpo .single_wedo .packdes h4{
+
+     font-size: 0.6rem;
+     letter-spacing: 0px;
+   }
+
+   .styleGraxpo .single_wedo {
+      width: 100%;
+     padding-top: 10px; 
+     }
+
+
+     .styleGraxpo .single_wedo .wedoprice {
+       font-size: 0.82rem;
+       font-weight: 200;
+       padding-bottom: 15px;
+       letter-spacing: normal;
+     }
+
+     .about .single_wedo .packdes {
+       padding-bottom: 10px;
+       padding-left: 4px;
+       padding-right: 4px;
+     }
+
+     .styleGraxpo .single_wedo#reduxmember h2{
+       letter-spacing: 0px;
+       font-size: 0.80rem;
+     }
+     .styleGraxpo .single_wedo#reduxmember h4{
+       letter-spacing: 0px;
+       font-size: 0.6rem;
+     }
+
+     .styleGraxpo .about .wedo_content_area .col-md-4 {
+       margin-top: 0px;
+     }
+     .styleGraxpo .wedo_content_area {
+       padding-bottom: 0px;
+       overflow: hidden;
+     }
+ 
+    .styleGraxpo .blog .about .pricing-note#member-note {      
+       font-size: 0.6rem;
+       margin-top: 20px;
+     }   
+
+   .styleGraxpo .blog .about .pricing-note {     
+     font-size: 0.6rem;
+     margin-top: 8px;
+     }   
+
+}
+
+@media only screen and (max-width: 320px) {
+   
+   .styleGraxpo .single_wedo:hover .addToCart{
+     
+       box-shadow: inset 0 0 0 1px #fff;  
+    }
+    .styleGraxpo .single_wedo#reduxmember h2 {
+      letter-spacing: 0px;
+      font-size: 0.64rem;
+    } 
+
+    
+    .styleGraxpo .blog .about {
+       margin-bottom: 10%;
+  }
+
+
+}
