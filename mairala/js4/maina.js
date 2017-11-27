@@ -28,7 +28,7 @@ jQuery(document).ready(function($){
    /* -- Build Product Database -- */
    // function Product(p_id, descr, pr_price, black_pic, whie_pic) {
    var prod1 = new Product (1, "First-Timer 1 Session", 40.00, "r1black.png", "r1white.png");
-   var prod2 = new Product (2, "One Session", 65.00, "r1black.png", "r1white.png");
+   var prod2 = new Product (2, "One Session", 29.00, "r1black.png", "r1white.png");
    var prod3 = new Product (3, "3-Session Pack", 150.00, "r3black.png", "r3white.png");
    var prod4 = new Product (5, "5-Session Pack", 225.00, "r5black.png", "r5white.png");
    var prod5 = new Product (10, "10-Session Pack", 400.00, "r10black.png", "r10white.png");

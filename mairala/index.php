@@ -150,7 +150,13 @@
              #specialHours{
                      color: #6093e7;
              }
-
+             .style-clone .blog  h4#specialPrice{
+                padding-top: 8px;
+                color:  #6093e7;
+              }
+             .wedoprice.highlightBlue{
+                     color: #6093e7;
+             }
 
 
             #map {    
@@ -1137,6 +1143,7 @@
                                          <div class="col-md-12">                    
                                              <h3>PRICING</h3> 
                                              </div>
+                                             <h4 id="specialPrice">Cyber Monday Special!</h4>
                                      </div>   
 
   <div class="wedo_content_area">
@@ -1179,7 +1186,7 @@
                          <h4>1 Session</h4>
                        </div>
 
-                       <h2 class="wedoprice">$65</h2>
+                       <h2 class="wedoprice highlightBlue">$29</h2>
 
                        <div class="addToCart">
                           <h6>ADD TO CART</h6>
