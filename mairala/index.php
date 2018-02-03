@@ -270,6 +270,7 @@
 
 
 
+
  <script src="https://checkout.stripe.com/checkout.js"></script>
 
 
@@ -347,7 +348,7 @@
 
 <!--start-images-slider -->
                      <div class="bootstrap2 fwslider-clone webfont-clone rectprogress-clone style-clone slider-clone">
-                             <div class="images-slider">
+                             <div class="images-slider carousel slide lazy">
 
                                      <!-- start slider -->
                                  <div id="fwslider">
@@ -392,7 +393,7 @@
                                          </div>
 
                                          <div class="slide">
-                                             <img src="images/cryosatad_mini.jpg"  alt=""/>
+                                             <img data-src="images/cryosatad_mini.jpg"  alt=""/>
                                               <div class="slide_content">
                                                  <div class="slide_content_wrap">
                                                        <!-- Text description -->
@@ -417,7 +418,7 @@
                                          <!-- /Duplicate to create more slides -->
                                          <div class="slide">
                                          <div >
-                                             <img src="images/womanHappySnow 2 copy_min.jpg" alt=""/>
+                                             <img data-src="images/womanHappySnow 2 copy_min.jpg" alt=""/>
 
                                               <div class="slide_content">
 
@@ -437,7 +438,7 @@
                                          </div>
                                          </div>
                                          <div class="slide">
-                                             <img src="images/dude running urban cold copy_mini.jpg"  alt=""/>
+                                             <img data-src="images/dude running urban cold copy_mini.jpg"  alt=""/>
                                               <div class="slide_content">
                                                  <div class="slide_content_wrap">
                                                        <!-- Text description -->
@@ -462,7 +463,7 @@
                                              </div>
                                          </div>
                                          <div class="slide">
-                                             <img src="images/insidechamberbig_mini.jpg"  alt=""/>
+                                             <img data-src="images/insidechamberbig_mini.jpg"  alt=""/>
                                               <div class="slide_content">
                                                  <div class="slide_content_wrap">
                                                        <!-- Text description -->
@@ -1515,7 +1516,14 @@
              });
           </script>
 
+
+
           <script>
+
+              $(document).ready(function() {
+                  $('img[data-src]').each()
+                });
+
                $( document ).ready(function() {
                    $('#giftF').hide();
 
