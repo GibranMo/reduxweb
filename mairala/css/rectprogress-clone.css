@@ -1,0 +1,78 @@
+.rectprogress-clone #myProgressAnx,
+.rectprogress-clone #myProgressJoint,
+.rectprogress-clone #myProgressMS,
+.rectprogress-clone #myProgressStretch {
+  position: relative;
+  background-color: #CDCDCD;
+}
+.rectprogress-clone #myBar,
+.rectprogress-clone #myBarAnxiety,
+.rectprogress-clone #myBarJointPain,
+.rectprogress-clone #myBarMetabolism,
+.rectprogress-clone #myBarMuscleSoreness,
+.rectprogress-clone #myBarPerformance,
+.rectprogress-clone #myBarRecovery,
+.rectprogress-clone #myBarStretch,
+.rectprogress-clone #myBarTight {
+  background-color: #2E2E2E;
+  position: absolute;
+}
+.rectprogress-clone #myBar,
+.rectprogress-clone #myBarJointPain,
+.rectprogress-clone #myBarMetabolism,
+.rectprogress-clone #myBarMuscleSoreness,
+.rectprogress-clone #myBarPerformance,
+.rectprogress-clone #myBarRecovery,
+.rectprogress-clone #myBarTight,
+.rectprogress-clone #myProgress,
+.rectprogress-clone #myProgressAnx,
+.rectprogress-clone #myProgressJoint,
+.rectprogress-clone #myProgressMS,
+.rectprogress-clone #myProgressStretch {
+  height: 8px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+}
+.rectprogress-clone #myProgress {
+  width: 90%;
+  position: relative;
+  background-color: #fff;
+}
+.rectprogress-clone #myProgressJoint {
+  width: 85%;
+}
+.rectprogress-clone #myProgressAnx {
+  width: 81%;
+}
+.rectprogress-clone #myProgressMS,
+.rectprogress-clone #myProgressStretch {
+  width: 84%;
+}
+.rectprogress-clone #myBar {
+  width: 40px;
+}
+.rectprogress-clone #myBarAnxiety,
+.rectprogress-clone #myBarStretch {
+  width: 280px;
+  height: 8px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+}
+.rectprogress-clone #myBarJointPain {
+  width: 310px;
+}
+.rectprogress-clone #myBarPerformance {
+  width: 150px;
+}
+.rectprogress-clone #myBarMuscleSoreness {
+  width: 290px;
+}
+.rectprogress-clone #myBarRecovery {
+  width: 5px;
+}
+.rectprogress-clone #myBarTight {
+  width: 100px;
+}
+.rectprogress-clone #myBarMetabolism {
+  width: 170px;
+}

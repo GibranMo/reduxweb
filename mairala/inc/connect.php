@@ -1,7 +1,4 @@
 <?php
-/* File   : connect.php
-  
-*/
 
 	// connect to local database
 	
@@ -14,20 +11,6 @@
 
 	$conn = new mysqli($dbhost, $dbuser, $dbpass, $mydb);
 
-	
-	//a2plcpnl0443.prod.iad2.secureserver.net
-	/*
-		$dbhost = 'a2plcpnl0443.prod.iad2.secureserver.net';
-	$dbuser = 'gibranmo';
-	$dbpass = '5876leonardo';
-	$mydb = 'reduxdb';
-
-	*/
-	
-	/*
-	ALTERNATE STYLE:
-	$conn = mysqli_connect($dbhost, $dbuser, $dbpass, $mydb);
-	*/
 	
 	if ($conn->connect_errno)
   	{

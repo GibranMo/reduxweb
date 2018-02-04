@@ -1,0 +1,12 @@
+{
+    "name": "gibran/dummy",
+    "authors": [
+        {
+            "name": "Gibran Morales",
+            "email": "gibrandena@gmail.com"
+        }
+    ],
+    "require": {
+        "stripe/stripe-php": "^4.13"
+    }
+}
