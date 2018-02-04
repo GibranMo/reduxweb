@@ -1,5 +1,5 @@
 <?php
-  require_once('./con/config.php');
+  require_once('./con/configTEST.php');
   require 'inc/connect.php';
   date_default_timezone_set('America/Los_Angeles');
 
@@ -20,6 +20,10 @@
   
   if ( array_key_exists('gifts', $_POST) ) {
     $giftListArray =  $_POST['gifts'];
+
+    var_dump($giftListArray);
+
+
  
   }
     /* Calculate total num of prods sold */
@@ -32,8 +36,6 @@
   }
   $totalNumProdsSol = $totalQuantity;
    
-
-
   $customer = \Stripe\Customer::create(array(
       'email' => $email,
       'source'  => $token
@@ -48,14 +50,8 @@
  
   $totalChargeAmount = $totalChargeAmount /100; /* Conversion for internal data use */
 
-  
-
-
   if (isset($giftListArray)) {
     array_push($prodListArray, $giftListArray);
-  
-
-    
     $hasGift = true;
     $numOfGiftsSold = count($giftListArray);
   }
@@ -63,18 +59,12 @@
     $hasGift = false;
  
   }
-  print "hasGift: ".$hasGift."\n";
-  if ($hasGift) {
-    //print 
 
-  }
   $chargedccustomer_data = array('stripe_custid' => $customer->id, 'customerEmail' => $email,
             'chargeAmount' => $totalChargeAmount, 'zipcode' => $zipcode);
 
   
   $online_order_data = array($prodListArray, $chargedccustomer_data);
-
-   /*******************************/
 
    
 /* Look up email to check whether it's an existing customer */
@@ -110,16 +100,13 @@ if ($lookupEmail_sql = $conn->prepare("SELECT cid, firstname, lastname FROM Cust
                 $Online_OrderResult  = $conn->query( $online_orderid_sql);
                 $Online_OrderResultRow = $Online_OrderResult->fetch_assoc();
                 $newOrderID = $Online_OrderResultRow['oo_id'];
-                echo "orderID: ".$newOrderID;
-                echo "\n";
-                          
-                          
-                          
+                
       }
       else { /* It's a new customer */
         
-        /* Business Decison: only create an entry into the Online_Orders table. This new Customer can then be later 
-            identified/validated when he comes in with the email and zipcode provided at checkout.
+        /* Business Decison: only create an entry into the Online_Orders table. Cannot create a new Customer profile
+          with only an email provided, This new Customer can then be later 
+            identified/validated when he comes in with confirmcode/email/zipcode
         */
         $array1 = insert_OnlineOrders( $customer->id, "", $date, $totalNumProdsSol, $hasGift, $zipcode, $totalChargeAmount, $email, $ts3, $conn );
          $code = $array1['confirmcode'];
@@ -133,9 +120,12 @@ if ($lookupEmail_sql = $conn->prepare("SELECT cid, firstname, lastname FROM Cust
                               $ppid = $q['productTypeId'];
                               $isgift = $q['isgift'];
                               $giftID =  $q['giftid'];
+                              $prodprice = $q['productprice'];
                               if ($ppid == 2) {
                                 $packageType = 1;
                               }
+                              else if ($ppid == 15)
+                                $packageType = 1;
                               else if ($ppid == 6)
                                 $packageType = 1000;
                               else
@@ -144,7 +134,7 @@ if ($lookupEmail_sql = $conn->prepare("SELECT cid, firstname, lastname FROM Cust
                               for ($i = 0; $i< $ctr; $i++) {
                                 if (!$isgift) {
                                    
-                                    update_customer_Packages($id, $customer->id, $firstname, $lastname, $packageType, $packageType, $date, $newOrderID, $q['productTypeId'], $conn);
+                                    update_customer_Packages($id, $customer->id, $firstname, $lastname, $packageType, $packageType, $date, $newOrderID, $q['productTypeId'], $prodprice, $conn);
                                    
                                 }                              
                              
@@ -161,28 +151,37 @@ if ($lookupEmail_sql = $conn->prepare("SELECT cid, firstname, lastname FROM Cust
                               $giftMessage = strip_tags($g['msge']);
                               $giftMessage = $conn->real_escape_string($giftMessage);
                               $giftProd = $g['prod'];
+
+                              $g_Id = $g['gId'];
+                              $price = lookup_package_chargeamt($prodListArray, $g_Id);
                             
                              
                               if( $giftIDx == 2)
                                 $packageType = 1;
                               else if ( $giftIDx == 6)
                                 $packageType = 1000;
+                              else if ( $giftIDx == 15)
+                                $packageType = 1;
                               else
                                 $packageType =  $giftIDx;
                              
 
-                              $checkEmail = checkCustomerExists($giftToEmail, $conn);
+                              $checkEmail = checkCustomerExists($giftToEmail, $conn); //check with email
                              
                               if ( $checkEmail == -1) { /* Recipient of Gift Email is for a new customer */
                               
                                 /* Create a new Customer Profile */
                                 $newCustID = insert_into_Customers( $giftToEmail, $giftFirstName, $giftLastName, $date, false, $conn); 
-                                $newPackID = insert_into_PackagesGift($newCustID, $giftFirstName, $giftLastName, $packageType, $packageType, $date, $newOrderID, $giftIDx, $conn);
+                                $newPackID = insert_into_PackagesGift($newCustID, $giftFirstName, $giftLastName, $packageType, $packageType, $date, $newOrderID, $giftIDx, $price, $conn);
+
+                                /* Merge this new customer with any orders packages that do not have a profile but are associated with this email */
+                                
+                                mergePacksAndNewCustomer($giftToEmail, $newCustID, $conn);
                               }
                               else { 
                              
                                
-                                $newPackID = update_customer_Packages2($checkEmail, $packageType, $packageType, $date, $newOrderID, $giftIDx, $conn );
+                                $newPackID = update_customer_Packages2($checkEmail, $packageType, $packageType, $date, $newOrderID, $giftIDx, $price, $conn );
                               }
 
                              
@@ -204,9 +203,33 @@ if ($lookupEmail_sql = $conn->prepare("SELECT cid, firstname, lastname FROM Cust
                         delegeateEmails ($chargedccustomer_data, $buyerName, $code, $prodListArray, $giftList);
   }
 
+    function lookup_package_chargeamt($prodListArray, $giftID)  {
+      foreach ($prodListArray as $q) {        
+          if (isset( $q["giftid"] ) ) 
+              if ($q["giftid"] == $giftID)
+                return $q["productprice"];
+      }
+
+      return 0.00;
+    }
+    function mergePacksAndNewCustomer($email, $newCustID, $connObj)  {
+        $sql = "UPDATE Packages AS p INNER JOIN Online_Orders AS oo 
+                 ON p.oo_id = oo.oo_id
+                 SET oo.cust_id =?,
+                 p.cid =?
+                 WHERE oo.email=?";
+        $stmt = $connObj->prepare($sql);
+        $stmt->bind_param("iis", $newCustID, $newCustID, $email);
+        $stmt->execute();
+        if($stmt->errno)
+            echo "FAILURE!!! ".$stmt_update_customer_stripeid_sql->error;
+        else 
+          echo "UPDATEd {$stmt->affected_rows} rows";
+
+
+    }
 
     function checkCustomerExists ($email, $connObj) {
-      echo "checkCustomerExists()"."\n";
       $sql = "SELECT cid FROM Customers WHERE email=?";
       $stmt = $connObj->prepare($sql);
       $stmt->bind_param("s", $email);
@@ -215,7 +238,6 @@ if ($lookupEmail_sql = $conn->prepare("SELECT cid, firstname, lastname FROM Cust
         echo "FAILURE!!! ".$stmt->error;
       else 
         echo "Inserted(?) {$stmt->affected_rows} rows";
-      echo "\n";
       $result = $stmt->get_result();
     
       if ($result->num_rows == 1 ) { /* Found the Customer in the database and no Gifts ordered */
@@ -241,7 +263,7 @@ if ($lookupEmail_sql = $conn->prepare("SELECT cid, firstname, lastname FROM Cust
         echo "FAILURE!!! ".$stmt->error;
       else 
         echo "Inserted(?) {$stmt->affected_rows} rows";
-      echo "\n";
+
       $newID = $stmt->insert_id;
 
       $stmt->close();
@@ -262,17 +284,19 @@ if ($lookupEmail_sql = $conn->prepare("SELECT cid, firstname, lastname FROM Cust
       $stmt->close();
       return $newID;
     }
-    function insert_into_PackagesGift( $customerid, $firstname, $lastname, $packagetype, $sessionsleft, $datepurchased, $onlineOrderId, $prodID, $connObj) {
+    function insert_into_PackagesGift( $customerid, $firstname, $lastname, $packagetype, $sessionsleft, $datepurchased, $onlineOrderId, $prodID, $price, $connObj) {
+        //Strip the '$' character from price
+        $price = str_replace("$", "", $price);
         $firstname = strtolower($firstname);
         $lastname = strtolower($lastname);
         $sql = "INSERT INTO Packages (cid, firstname, lastname, packageType, sessionsleft, datepurchased,
-                oo_id, prod_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                oo_id, prod_id, charged_amt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
-        echo "insert_into_PackagesGift"."\n";
+      
         $stmt_insert_into_Packages_sql = $connObj->prepare( $sql );
 
    
-        $stmt_insert_into_Packages_sql->bind_param("issiisii", $customerid, $firstname, $lastname, $packagetype, $sessionsleft, $datepurchased, $onlineOrderId, $prodID);
+        $stmt_insert_into_Packages_sql->bind_param("issiisiii", $customerid, $firstname, $lastname, $packagetype, $sessionsleft, $datepurchased, $onlineOrderId, $prodID, $price);
         
         $stmt_insert_into_Packages_sql->execute();
         $newID = $stmt_insert_into_Packages_sql->insert_id;
@@ -280,29 +304,31 @@ if ($lookupEmail_sql = $conn->prepare("SELECT cid, firstname, lastname FROM Cust
 
         return $newID;
     }
-    function update_customer_Packages($customerid, $stripe_custid, $firstname, $lastname, $packagetype, $sessionsleft, $datepurchased, $onlineOrderId, $prodID, $connObj) {
-         echo "updateCustomerPackages()"."\n";
+    function update_customer_Packages($customerid, $stripe_custid, $firstname, $lastname, $packagetype, $sessionsleft, $datepurchased, $onlineOrderId, $prodID, $price, $connObj) {
+       
         $firstname = strtolower($firstname);
         $lastname = strtolower($lastname);
         $sql="";
+        
+        //Strip the '$' character from price
+
+        $price = str_replace("$", "", $price);
         if (empty($customerid)) {
           $sql = "INSERT INTO Packages (stripe_custid, packageType, sessionsleft, datepurchased,
-                oo_id, prod_id) VALUES (?, ?, ?, ?, ?, ?)";
-          echo "1"."\n";
+                oo_id, prod_id, charged_amt) VALUES (?, ?, ?, ?, ?, ?, ?)";
         }
         else {
           $sql = "INSERT INTO Packages (cid, stripe_custid, firstname, lastname, packageType, sessionsleft, datepurchased,
-                oo_id, prod_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-          echo "2"."\n";
+                oo_id, prod_id, charged_amt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         }
         $stmt_insert_into_Packages_sql = $connObj->prepare( $sql );
 
         if (empty($customerid)) {
-          $stmt_insert_into_Packages_sql->bind_param("siisii", $stripe_custid, $packagetype, $sessionsleft, $datepurchased, $onlineOrderId, $prodID);
+          $stmt_insert_into_Packages_sql->bind_param("siisiii", $stripe_custid, $packagetype, $sessionsleft, $datepurchased, $onlineOrderId, $prodID, $price);
         }
         else
-          $stmt_insert_into_Packages_sql->bind_param("isssiisii", $customerid, $stripe_custid, $firstname, $lastname, $packagetype, $sessionsleft,
-           $datepurchased, $onlineOrderId, $prodID);
+          $stmt_insert_into_Packages_sql->bind_param("isssiisiii", $customerid, $stripe_custid, $firstname, $lastname, $packagetype, $sessionsleft,
+           $datepurchased, $onlineOrderId, $prodID, $price);
         
 
         $stmt_insert_into_Packages_sql->execute();
@@ -312,11 +338,12 @@ if ($lookupEmail_sql = $conn->prepare("SELECT cid, firstname, lastname FROM Cust
         return $newID;
     }
 
-    function update_customer_Packages2($customerid, $packagetype, $sessionsleft, $datepurchased, $onlineOrderId, $prodID, $connObj) {
-       echo "updateCustomerPackages2()"."\n";
-      $sql = "INSERT INTO Packages (cid, packageType, sessionsleft, datepurchased, oo_id, prod_id) VALUES (?, ?, ?, ?, ?, ?)";
+    function update_customer_Packages2($customerid, $packagetype, $sessionsleft, $datepurchased, $onlineOrderId, $prodID, $price, $connObj) {
+       //Strip the '$' character from price
+      $price = str_replace("$", "", $price);
+      $sql = "INSERT INTO Packages (cid, packageType, sessionsleft, datepurchased, oo_id, prod_id, charged_amt) VALUES (?, ?, ?, ?, ?, ?, ?)";
       $stmt = $connObj->prepare( $sql );
-      $stmt->bind_param("iiisii", $customerid, $packagetype, $sessionsleft, $datepurchased, $onlineOrderId, $prodID);
+      $stmt->bind_param("iiisiii", $customerid, $packagetype, $sessionsleft, $datepurchased, $onlineOrderId, $prodID, $price);
       $stmt->execute();
        if($stmt->errno)
         echo "FAILURE!!! ".$stmt->error;
@@ -330,7 +357,6 @@ if ($lookupEmail_sql = $conn->prepare("SELECT cid, firstname, lastname FROM Cust
     function insert_OnlineOrders ($stripe_custid, $cid, $date, $totalNumProdsSol, $hasGift, $zipcode, $totalChargeAmount, $email, $ts3, $connObj) {
       $sql = "";
       $confirmCode = randomKey(6);
-      echo "confirm code: ".$confirmCode."\n";
       if (empty($cid))  {
         $sql = "INSERT INTO Online_Orders (confirmCode, stripe_custid, purchase_date, numOfProds, includes_gift, zipcode, chargeAmount, email, timestamp)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ";
@@ -364,7 +390,6 @@ if ($lookupEmail_sql = $conn->prepare("SELECT cid, firstname, lastname FROM Cust
       $messageProvided = false;
       $prod = "";
       
-                        echo "\n";
       foreach ($prodListArray as $q) {        
           if (isset( $q["isgift"] ) ) {
               if ($q["isgift"])
@@ -375,14 +400,11 @@ if ($lookupEmail_sql = $conn->prepare("SELECT cid, firstname, lastname FROM Cust
       }
       $ctr = 0;
       foreach ($giftList as $key) { 
-        echo "ctr: ".$ctr;
+       
           if (isset( $key["msge"] ) ) {
             if (!empty($key["msge"])) {
                 $messageProvided = true;
-                echo " msg: ".$key["msge"]."\n";
             }
-            else
-              " no message \n";
           }
           $ctr++;
     }
@@ -572,9 +594,9 @@ p {
                                   $firstHalfMessage.= '<p style="font-family: monospace, sans-serif; font-size: 1.0em">"'.$message.'"</p>
                                         <p style="font-family: monospace, sans-serif; font-size: 1.0em">- '.$fromFullName.'</p>';
                                  }
-                                 else
-                                  echo "FUC ME!";
-                                  echo "\n";
+                           
+                                
+        
                                  $firstHalfMessage.='
                                     <table id="content-1" cellpadding="0" cellspacing="0" align="center">
                                         <tr>
@@ -853,7 +875,7 @@ p {
                                             
                                             
                                               if ($boughtNonGift)
-                                                $message.='<p style="font-size: 1.1em; font-family: Arial, Helvetica, sans-serif;">You\'re on your way to revitilzation!</p>';
+                                                $message.='<p style="font-size: 1.1em; font-family: Arial, Helvetica, sans-serif;">You\'re on your way to revitalization!</p>';
                                              
                                           $message.='</td>
                                       </tr>
