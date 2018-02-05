@@ -252,9 +252,9 @@ if ($lookupEmail_sql = $conn->prepare("SELECT cid, firstname, lastname FROM Cust
 
     function insert_into_Customers( $recEmail, $giftFirst, $giftLast, $date, $isRaiders, $connObj) {
      
-      $giftFirst = strtolower($giftFirst);
-      $giftLast = strtolower($giftLast);
-      $recEmail = strtolower($recEmail);
+      $giftFirst = strtoupper($giftFirst);
+      $giftLast = strtoupper($giftLast);
+      $recEmail = strtoupper($recEmail);
       $sql = "INSERT INTO Customers ( email, firstname, lastname, dateadded, preferredFirstName, preferredLastName, isRaiders) values ( ?, ?, ?, ?, ?, ?, ?)";
       $stmt = $connObj->prepare( $sql );
       $stmt->bind_param("ssssssi", $recEmail, $giftFirst, $giftLast, $date, $giftFirst, $giftLast, $isRaiders );
@@ -270,8 +270,8 @@ if ($lookupEmail_sql = $conn->prepare("SELECT cid, firstname, lastname FROM Cust
       return $newID;
     }
     function insert_into_Gifts($oo_id, $fromName, $recipient_email, $pid, $date, $message, $connObj) {
-      $fromName = strtolower($fromName);
-      $recipient_email = strtolower($recipient_email);
+      $fromName = strtoupper($fromName);
+      $recipient_email = strtoupper($recipient_email);
       $sql = "INSERT INTO Gifts (oo_id, from_name, recipient_email, pid, datepurchased, message) values (?, ?, ?, ?, ?, ?)";
       $stmt = $connObj->prepare( $sql );
       $stmt->bind_param("ississ", $oo_id, $fromName, $recipient_email, $pid, $date, $message );
@@ -287,8 +287,8 @@ if ($lookupEmail_sql = $conn->prepare("SELECT cid, firstname, lastname FROM Cust
     function insert_into_PackagesGift( $customerid, $firstname, $lastname, $packagetype, $sessionsleft, $datepurchased, $onlineOrderId, $prodID, $price, $connObj) {
         //Strip the '$' character from price
         $price = str_replace("$", "", $price);
-        $firstname = strtolower($firstname);
-        $lastname = strtolower($lastname);
+        $firstname = strtoupper($firstname);
+        $lastname = strtoupper($lastname);
         $sql = "INSERT INTO Packages (cid, firstname, lastname, packageType, sessionsleft, datepurchased,
                 oo_id, prod_id, charged_amt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
@@ -306,8 +306,8 @@ if ($lookupEmail_sql = $conn->prepare("SELECT cid, firstname, lastname FROM Cust
     }
     function update_customer_Packages($customerid, $stripe_custid, $firstname, $lastname, $packagetype, $sessionsleft, $datepurchased, $onlineOrderId, $prodID, $price, $connObj) {
        
-        $firstname = strtolower($firstname);
-        $lastname = strtolower($lastname);
+        $firstname = strtoupper($firstname);
+        $lastname = strtoupper($lastname);
         $sql="";
         
         //Strip the '$' character from price
@@ -1068,3 +1068,4 @@ p {
     }
 
 ?>
+
