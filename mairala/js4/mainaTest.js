@@ -1,3 +1,4 @@
+$(document).ready(function() {});
 jQuery(document).ready(function($) {
     var giftFormSubmitted = !1;
     var giftId = 0;
@@ -14,14 +15,18 @@ jQuery(document).ready(function($) {
     var globalProductId = "";
     var globalGiftMessage = "";
     var globalProdPrice = "";
-    var prod1 = new Product(1, "First-Timer 1 Session", 40.00, "r1black.png", "r1white.png");
-    var prod2 = new Product(2, "One Session", 65.00, "r1black.png", "r1white.png");
-    var prod3 = new Product(3, "3-Session Pack", 150.00, "r3black.png", "r3white.png");
-    var prod4 = new Product(5, "5-Session Pack", 225.00, "r5black.png", "r5white.png");
-    var prod5 = new Product(10, "10-Session Pack", 400.00, "r10black.png", "r10white.png");
-    var prod6 = new Product(1000, "Membership", 700.00, "rxblack.png", "rxwhite.png");
-    var inventory = [prod1, prod2, prod3, prod4, prod5, prod6];
+    var prod1 = new Product(1, "First-Timer 1 Session", "r1black.png", "r1white.png");
+    var prod2 = new Product(2, "One Session", "r1black.png", "r1white.png");
+    var prod3 = new Product(3, "3-Session Pack", "r3black.png", "r3white.png");
+    var prod4 = new Product(5, "5-Session Pack", "r5black.png", "r5white.png");
+    var prod5 = new Product(10, "10-Session Pack", "r10black.png", "r10white.png");
+    var prod6 = new Product(1000, "Membership", "rxblack.png", "rxwhite.png");
+    var prod7 = new Product(15, "Localized Session", "r1black.png", "r1white.png");
+    var inventory = [prod1, prod2, prod3, prod4, prod5, prod6, prod7];
     var ob = inventory.find(x => x.getProdId() == 1);
+    var cartLimitReached = !1;
+    var itemLimit = 9;
+    var prodCtr = 0;
     if (cartWrapper.length > 0) {
         var cartBody = cartWrapper.find('.body')
         var cartList = cartBody.find('ul').eq(0);
@@ -35,9 +40,9 @@ jQuery(document).ready(function($) {
         var gbAddToCartBtn = $('.gb-add-to-cart');
         gbAddToCartBtn.on('click', function(event) {
             event.preventDefault();
-            if (Number(cartCount.find('li').eq(0).text()) < 9) {
+            if (Number(cartCount.find('li').eq(0).text()) <= 9) {
                 addToCart($(this))
-            }
+            } else console.log("stopped at gbAddToCartBtn.on('click')")
         });
         addToCartBtn.on('click', function(event) {
             event.preventDefault();
@@ -88,24 +93,26 @@ jQuery(document).ready(function($) {
         globalProductId = trigger.data('ppid');
         if (Number(cartCount.find('li').eq(0).text()) >= 9) {
             return
+        } else {
+            var num = Number(cartCount.find('li').eq(0).text()) + 1;
+            var productid = globalProductId;
+            var obj = inventory.find(x => x.getProdId() == productid);
+            globalProdPrice = obj.getPrice();
+            var prodImageFile = obj.getBlackPic();
+            var prodPrice = obj.getPrice();
+            var prodDescr = obj.getDescr();
+            $("#prod-added-image").attr("src", "img/reduxblack/" + prodImageFile);
+            $('#text-descr-prod').text(prodDescr);
+            $("#price-prod").text('$' + prodPrice);
+            var prodAddedImage = $("#prod-added-image");
+            var obj = inventory.find(x => x.getProdId() == productid);
+            var prodImageFile = obj.getBlackPic();
+            prodAddedImage.attr("src", "img/reduxblack/" + prodImageFile);
+            var cartIsEmpty = cartWrapper.hasClass('empty');
+            updateCartCount(cartIsEmpty);
+            updateCartTotal(globalProdPrice, !0);
+            cartWrapper.removeClass('empty')
         }
-        var productid = globalProductId;
-        var obj = inventory.find(x => x.getProdId() == productid);
-        globalProdPrice = obj.getPrice();
-        var prodImageFile = obj.getBlackPic();
-        var prodPrice = obj.getPrice();
-        var prodDescr = obj.getDescr();
-        $("#prod-added-image").attr("src", "img/reduxblack/" + prodImageFile);
-        $('#text-descr-prod').text(prodDescr);
-        $("#price-prod").text('$' + prodPrice + ".00");
-        var prodAddedImage = $("#prod-added-image");
-        var obj = inventory.find(x => x.getProdId() == productid);
-        var prodImageFile = obj.getBlackPic();
-        prodAddedImage.attr("src", "img/reduxblack/" + prodImageFile);
-        var cartIsEmpty = cartWrapper.hasClass('empty');
-        updateCartCount(cartIsEmpty);
-        updateCartTotal(globalProdPrice, !0);
-        cartWrapper.removeClass('empty')
     }
 
     function addProduct(prodPrice, productid) {
@@ -123,7 +130,7 @@ jQuery(document).ready(function($) {
                 var prodName = obj.getDescr();
                 var whiteProdImage = obj.getWhitePic();
                 whiteProdImage = "img/reduxwhite/" + whiteProdImage;
-                var productAdded = $('<li class="product" data-prod="' + productid + '" id="prodListItem' + productid + '"><div class="product-image"><a href="#0"><img src="' + whiteProdImage + '" alt="placeholder"></a></div><div class="product-details" data-isGift="0" data-giftId="0"><h3 class="textdes"><a href="#0">' + prodName + '</a></h3><span class="price">$' + prodPrice + '.00</span><div class="actions"><a href="#0" class="delete-item">Delete</a><div class="quantity"><label for="cd-product-' + productid + '">Qty</label><span class="select"><select id="cd-product-' + productid + '" name="quantity"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option></select></span></div></div></div></li>');
+                var productAdded = $('<li class="product" data-prod="' + productid + '" id="prodListItem' + productid + '"><div class="product-image"><a href="#0"><img src="' + whiteProdImage + '" alt="placeholder"></a></div><div class="product-details" data-isGift="0" data-giftId="0"><h3 class="textdes"><a href="#0">' + prodName + '</a></h3><span class="price">$' + prodPrice + '</span><div class="actions"><a href="#0" class="delete-item">Delete</a><div class="quantity"><label for="cd-product-' + productid + '">Qty</label><span class="select"><select id="cd-product-' + productid + '" name="quantity"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option></select></span></div></div></div></li>');
                 cartList.prepend(productAdded);
                 dataProdOrderListId++
             }
@@ -135,8 +142,11 @@ jQuery(document).ready(function($) {
             }
             var whiteProdImage = obj.getWhitePic();
             whiteProdImage = "img/reduxwhite/" + whiteProdImage;
-            var productAdded = $('<li class="product" data-prod="' + productid + '" id="prodListItem' + productid + '"><div class="product-image"><a href="#0"><img src="' + whiteProdImage + '" alt="placeholder"></a></div><div class="product-details" data-isGift="0" data-giftId="0"><h3 class="textdes"><a href="#0">' + prodName + '</a></h3><span class="price">$' + prodPrice + '.00</span><div class="actions"><a href="#0" class="delete-item">Delete</a><div class="quantity"><label for="cd-product-' + productid + '">Qty</label><span class="select"><select id="cd-product-' + productid + '" name="quantity"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option></select></span></div></div></div></li>');
+            var productAdded = $('<li class="product" data-prod="' + productid + '" id="prodListItem' + productid + '"><div class="product-image"><a href="#0"><img src="' + whiteProdImage + '" alt="placeholder"></a></div><div class="product-details" data-isGift="0" data-giftId="0"><h3 class="textdes"><a href="#0">' + prodName + '</a></h3><span class="price">$' + prodPrice + '</span><div class="actions"><a href="#0" class="delete-item">Delete</a><div class="quantity"><label for="cd-product-' + productid + '">Qty</label><span class="select"><select id="cd-product-' + productid + '" name="quantity"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option></select></span></div></div></div></li>');
             cartList.prepend(productAdded)
+        }
+        if (getQuickCount() == itemLimit) {
+            disableAddedToCartFull()
         }
     }
 
@@ -156,6 +166,25 @@ jQuery(document).ready(function($) {
         cartList.find('.deleted').remove();
         if (product.find('.product-details').attr("data-isGift") == 1)
             deleteGiftFromList(product.find('.product-details').attr("data-giftId"))
+        prodCtr = getQuickCount();
+        if (prodCtr < 9) {
+            enableAddedToCart()
+        }
+    }
+
+    function getQuickCount() {
+        var quantity = 0;
+        var price = 0;
+        cartList.children('li:not(.deleted)').each(function() {
+            var isGiftType = Number($(this).find('.product-details').data('isgift'));
+            if (isGiftType == 1) {
+                var singleQuantity = 1
+            } else {
+                var singleQuantity = Number($(this).find('select').val())
+            }
+            quantity += singleQuantity
+        });
+        return quantity
     }
 
     function quickUpdateCart() {
@@ -168,12 +197,18 @@ jQuery(document).ready(function($) {
             } else {
                 var singleQuantity = Number($(this).find('select').val())
             }
-            quantity = quantity + singleQuantity;
+            quantity += singleQuantity;
             price = price + singleQuantity * Number($(this).find('.price').text().replace('$', ''))
         });
+        prodCtr = quantity;
         cartTotal.text(price.toFixed(2));
         cartCount.find('li').eq(0).text(quantity);
         cartCount.find('li').eq(1).text(quantity + 1)
+        if (getQuickCount() >= itemLimit) {
+            disableAddedToCartFull()
+        } else {
+            enableAddedToCart()
+        }
     }
 
     function updateCartCount(emptyCart, quantity) {
@@ -208,6 +243,18 @@ jQuery(document).ready(function($) {
         bool ? cartTotal.text((Number(cartTotal.text()) + Number(price)).toFixed(2)) : cartTotal.text((Number(cartTotal.text()) - Number(price)).toFixed(2))
     }
 
+    function disableAddedToCartFull() {
+        $("[data-target='#myModal'").each(function() {
+            $(this).attr('data-target', '#myModalFull')
+        })
+    }
+
+    function enableAddedToCart() {
+        $("[data-target='#myModalFull'").each(function() {
+            $(this).attr('data-target', '#myModal')
+        })
+    }
+
     function deleteGiftFromList(gift_id) {
         for (var x = 0; x < giftList.length; x++) {
             if (giftList[x].gId == gift_id) {
@@ -240,14 +287,13 @@ jQuery(document).ready(function($) {
         var message = $('#message-text').val();
         globalGiftMessage = message;
         var productType = $("#hidden-prodId").val();
-        globalProductId = productType;
         var giftObj = {
             recipientFirstName: recFirstName,
             recipientLastName: recLastName,
             recipientEmail: recEmail,
             from: fromName,
             msge: message,
-            prod: productType,
+            prod: globalProductId,
             gId: giftId
         };
         giftList.push(giftObj)
@@ -270,9 +316,7 @@ jQuery(document).ready(function($) {
                 products_sold: dataProdOrderList,
                 gifts: giftList
             };
-            $.post("chargez-x.php", orderObj).done(function(data) {
-                 console.log( "Card charged: " + data );
-            });
+            $.post("chargez.php", orderObj).done(function(data) {})
         }
     });
     document.getElementById('checkout-btn').addEventListener('click', function(e) {
@@ -286,7 +330,9 @@ jQuery(document).ready(function($) {
             checkoutDesc = "One Cryo Session";
         else if (cartCount.find('li').eq(0).text() == 1 && globalProductId == 6)
             checkoutDesc = "REDUX Membership";
-        else if (cartCount.find('li').eq(0).text() == 1 && (globalProductId > 2 && globalProductId < 6)) {
+        else if (cartCount.find('li').eq(0).text() == 1 && globalProductId == 15) {
+            checkoutDesc = "Localized Cryo Session"
+        } else if (cartCount.find('li').eq(0).text() == 1 && (globalProductId > 2 && globalProductId < 6)) {
             var prefix = "";
             if (globalProductId == 3)
                 prefix = "3";
@@ -339,7 +385,8 @@ jQuery(document).ready(function($) {
                 } else {
                     resetCount();
                     emptyCartList();
-                    $('#myModalThanks').modal('show')
+                    $('#myModalThanks').modal('show');
+                    $('body').addClass('bootstrap2')
                 }
             }
         });
@@ -361,12 +408,12 @@ jQuery(document).ready(function($) {
     var clBtn = $('#find');
     clBtn.on('click', function(event) {});
 
-    function Product(p_id, descr, pr_price, black_pic, white_pic) {
+    function Product(p_id, descr, black_pic, white_pic) {
         this.prod_id = p_id;
         this.prod_descr = descr;
-        this.prod_price = pr_price;
         this.prod_blackPic = black_pic;
         this.prod_whitePic = white_pic;
+        price = null;
         this.getProdId = function() {
             return this.prod_id
         }
@@ -374,7 +421,7 @@ jQuery(document).ready(function($) {
             return this.prod_descr
         }
         this.getPrice = function() {
-            return this.prod_price
+            return this.price
         }
         this.getBlackPic = function() {
             return this.prod_blackPic
@@ -382,31 +429,20 @@ jQuery(document).ready(function($) {
         this.getWhitePic = function() {
             return this.prod_whitePic
         }
+        this.setPrice = function(p_price) {
+            this.price = p_price
+        }
     }
-    $(document).on('click.bs.modal.data-api', '[data-toggle="modal"]', function(e) {
+    $(document).on('click.bs.modal.data-api', '[data-toggle="modal"]', function(e) {})
+    $(document).on('show.bs.modal', '.modal', function() {
+        if (Number(cartCount.find('li').eq(1).text()) == 9) {}
         $('body').addClass("bootstrap2");
         $('.cd-cart-container').addClass('empty');
         if ($('.cd-cart-container').hasClass('cart-open')) {
             $('.cd-cart-container').removeClass('cart-open')
         }
-        var $this = $(this)
-        var href = $this.attr('href')
-        var $target = $($this.attr('data-target') || (href && href.replace(/.*(?=#[^\s]+$)/, '')))
-        var option = $target.data('bs.modal') ? 'toggle' : $.extend({
-            remote: !/#/.test(href) && href
-        }, $target.data(), $this.data())
-        var what = $(this).attr("data-prodId");
-        var pid = $(this).data('ppid'); // step1
-        $("#hidden-prodId").attr("value", pid);
-        if ($this.is('a')) e.preventDefault()
-        $target.modal(option, this).one('hide', function() {
-            $this.is(':visible') && $this.focus()
-        })
-    })
-    $(document).on('show.bs.modal', '.modal', function() {
-        $(document.body).addClass('modal-open')
+        $("#hidden-prodId").attr("value", globalProductId)
     }).on('hidden.bs.modal', '.modal', function() {
-        $(document.body).removeClass('modal-open')
         $(document.body).removeClass('bootstrap2')
         $("#giftF").hide();
         $('#checkBox').attr('checked', !1);
@@ -423,36 +459,65 @@ jQuery(document).ready(function($) {
                 }
                 var whiteProdImage = obj.getWhitePic();
                 whiteProdImage = "img/reduxwhite/" + whiteProdImage;
-                var productAdded = $('<li class="product" data-prod="' + productid + '" id="prodListItem' + productid + '"><div class="product-image"><a href="#0"><img src="' + whiteProdImage + '" alt="placeholder"></a></div><div class="product-details" data-isGift="1" data-giftId="' + giftId + '"><h3 class="textdes"><a href="#0">' + prodName + '</a></h3><span class="price">$' + prodPrice + '.00</span><div class="actions"><a href="#0" class="delete-item">Delete</a><div class="quantityx giftclass"><img src="img/gift4.png" alt="placeholder"></div></li>');
+                var productAdded = $('<li class="product" data-prod="' + productid + '" id="prodListItem' + productid + '"><div class="product-image"><a href="#0"><img src="' + whiteProdImage + '" alt="placeholder"></a></div><div class="product-details" data-isGift="1" data-giftId="' + giftId + '"><h3 class="textdes"><a href="#0">' + prodName + '</a></h3><span class="price">$' + prodPrice + '</span><div class="actions"><a href="#0" class="delete-item">Delete</a><div class="quantityx giftclass"><img src="img/gift4.png" alt="placeholder"></div></li>');
                 cartList.prepend(productAdded);
+                prodCtr++;
                 giftFormSubmitted = !1
             } else {
-                if (Number(cartCount.find('li').eq(0).text()) < 9) {
+                if (prodCtr <= 8) {
                     addProduct(globalProdPrice, globalProductId)
-                }
+                    prodCtr++
+                } else {}
             }
         }
     })
-    $(document).on('click.bs.modal.data-api', '[data-toggle="modalx"]', function(e) {
-        $('body').addClass("bootstrap2");
-        var $thisx = $(this)
-        var hrefx = $this.attr('href')
-        var $target = $($this.attr('data-target') || (href && href.replace(/.*(?=#[^\s]+$)/, '')))
-        var option = $target.data('bs.modal') ? 'toggle' : $.extend({
-            remote: !/#/.test(href) && href
-        }, $target.data(), $this.data())
-        if ($this.is('a')) e.preventDefault()
-        $target.modal(option, this).one('hide', function() {
-            $this.is(':visible') && $this.focus()
-        })
-    })
-    $(document).on('show.bs.modal', '.modal', function() {
-        $(document.body).addClass('modal-open')
-    }).on('hidden.bs.modal', '.modal', function() {
-        $(document.body).removeClass('modal-open')
+    $(document).on('show.bs.modal', '.modal', function() {}).on('hidden.bs.modal', '.modal', function() {
         $('body').removeClass('bootstrap2')
         if (submittedForm == !0) {
             cartWrapper.addClass('empty')
+        }
+    })
+    $.ajax({
+        url: 'getprices.php',
+        type: 'GET',
+        dataType: "json",
+        success: function(data) {
+            var hasCents = !1;
+            var obj1 = data[0];
+            $.each(data, function(key, value) {
+                $.each(value, function(key, value) {
+                    if (key != "pr11") {
+                        if (value % 1 != 0)
+                            hasCents = !0
+                    }
+                })
+            });
+            $.each(data, function(key, value) {
+                $.each(value, function(key, value) {
+                    if (key != "pr11") {
+                        var prod = $("#" + key);
+                        if (!hasCents)
+                            prod.text("$" + Math.round(value));
+                        else prod.text("$" + value);
+                        var p_id = key.substring(2);
+                        var obj = inventory.find(x => x.getProdId() == p_id);
+                        obj.setPrice(value)
+                    }
+                })
+            })
+        },
+        error: function(data) {
+            console.log("data error:  " + data.errorThrown);
+            $('.wedoprice').each(function() {
+                $(this).text('error');
+                $(this).css("color", "#b53f0e")
+            });
+            $("[data-target='#myModal'").each(function() {
+                $(this).attr('data-target', '')
+            });
+            $('.single_wedo').each(function() {
+                $(this).removeClass('gb-add-to-cart')
+            })
         }
     })
 })
